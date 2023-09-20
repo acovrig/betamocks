@@ -46,13 +46,22 @@ module Betamocks
     def load_env(file)
       cached_env = YAML.load_file(file)
       env.method = cached_env[:method]
-      env.body = cached_env[:body]
+      env.body = cached_body(cached_env)
       env.response_headers = cached_env[:headers]
       env.status = cached_env[:status]
       env
     rescue Psych::SyntaxError => e
       Betamocks.logger.error "error loading cache file: #{e.message}"
       raise e
+    end
+
+    def cached_body(cached_env)
+      if @config[:symbolize_response]
+        return cached_env[:body].deep_symbolize_keys if cached_env[:body].is_a? Hash
+        return JSON.parse(cached_env[:body]).deep_symbolize_keys
+      end
+
+      cached_env[:body]
     end
 
     def dir_path

@@ -114,3 +114,11 @@
       :uid_location: some-location
       :uid_locator: some-locator
       :optional_code_locator: '<Quality>"(HI-DEF|LO-DEF)"</Quality>'
+
+# symbolize_keys
+- :base_uri: symbolize.keys.domain
+  :endpoints:
+  - :method: :get
+    :path: "/data"
+    :file_path: "json_data"
+    :symbolize_response: true
